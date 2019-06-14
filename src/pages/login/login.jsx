@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { Form, Icon, Input, Button } from 'antd';
-import logo from './images/logo.png'
+import logo from './images/timg.jpg'
 import './css/login.less'
 export default class Login extends Component {
 render() {
