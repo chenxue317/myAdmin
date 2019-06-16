@@ -23,7 +23,7 @@ class Login extends Component {
                   {pattern:/^[a-zA-Z0-9_]+$/,message:'密码必须为字母，数字，下划线'} */
  
   };
-  validator=(rule, value='', callback)=>{
+  validator=(rule, value="", callback)=>{
     value = value.trim()
     if(!value){
       callback('请输入密码')
