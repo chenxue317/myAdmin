@@ -1,27 +1,27 @@
 import React,{Component} from 'react';
-import { Form, Icon, Input, Button } from 'antd';
-import logo from './images/timg.jpg'
+import { Form, Icon, Input, Button,message } from 'antd';
+import logo from '../../asset/images/timg.jpg'
+import { reqLogin } from '../../api'
+import {setStorage} from '../../utils/storageUtils'
 import './css/login.less'
 class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
-    /* 统一校验 
-    (
-      [fieldNames: string[]],
-      [options: object],
-      callback(errors, values)
-    ) => void
-    */
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-       console.log('验证通过，发送ajax请求');
+    /* 统一校验 */
+    this.props.form.validateFields(async (err, values) => {
+      if (!err) {//1、保存user--永久保存用户信息 2、跳转到admin
+       let result = await reqLogin(values)
+       if(result.status===0){
+        setStorage(result.data)
+        /* console.log(result.data) */
+        // localStorage.setItem('userkey',JSON.stringify(result.data))
+        this.props.history.replace('/')
+       }else{
+        message.error(result.msg,2);
+       }
+       
       }
     });
-    /* { required: true, message: '请输入密码' },
-                  { min: 4, message: '密码长度不能小于4位'},
-                  { max: 12, message: '密码长度不能大于12位'},
-                  {pattern:/^[a-zA-Z0-9_]+$/,message:'密码必须为字母，数字，下划线'} */
- 
   };
   validator=(rule, value="", callback)=>{
     value = value.trim()
