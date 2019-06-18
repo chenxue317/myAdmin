@@ -9,7 +9,7 @@ class UpateForm extends Component {
     this.props.updateForm(form)
     return (
       <Form.Item>
-          {getFieldDecorator('updatcategoryname', {
+          {getFieldDecorator('categoryName', {
             rules: [{ required: true, message: '请输入分类名' }],
           })(
             <Input

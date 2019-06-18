@@ -91,10 +91,13 @@ export default class Category extends Component {
   }
 
   handleOk=()=>{//首先校验传过来的数据
-    this.form.validateFields((err, values) => {
+    this.form.validateFields(async(err, values) => {
       const categoryName = this.form.getFieldValue('categoryName')
       if (!err) {
-        reqUpdateCategory(this.category._id,categoryName)
+        let result =await reqUpdateCategory(this.category._id,categoryName)
+        if(result.status===0){
+          this.setState({visible:0})
+        }
       }
     });
   }
