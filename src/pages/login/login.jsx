@@ -3,6 +3,7 @@ import { Form, Icon, Input, Button,message } from 'antd';
 import logo from '../../asset/images/timg.jpg'
 import { reqLogin } from '../../api'
 import {setStorage} from '../../utils/storageUtils'
+import memoryUtils from '../../utils/memoryUtils'
 import './css/login.less'
 class Login extends Component {
   handleSubmit = e => {
@@ -12,9 +13,8 @@ class Login extends Component {
       if (!err) {//1、保存user--永久保存用户信息 2、跳转到admin
        let result = await reqLogin(values)
        if(result.status===0){
+        memoryUtils.user = result.data
         setStorage(result.data)
-        /* console.log(result.data) */
-        // localStorage.setItem('userkey',JSON.stringify(result.data))
         this.props.history.replace('/')
        }else{
         message.error(result.msg,2);

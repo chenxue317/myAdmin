@@ -22,10 +22,8 @@ class LeftNav extends Component {
         )
       }else{
         const cItem = item.children.find((cItem) =>cItem.key===path)
-        console.log(cItem)
         if (cItem) { // 当前请求的是某个二级菜单路由
           this.openKey = item.key
-          console.log(this.openKey)
         }
         return(
           <SubMenu

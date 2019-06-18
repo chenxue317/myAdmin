@@ -28,7 +28,7 @@ render() {
           <LeftNav/>
         </Sider>
         <Layout>
-          <Header style={{backgroundColor:"#fff",height: "80px"}}>
+          <Header style={{backgroundColor:"#fff",height: "80px",padding:0}}>
             <RightHead/>
           </Header>
           <Content style={{margin:"30px",backgroundColor:"#fff"}}>
