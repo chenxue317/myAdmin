@@ -25,6 +25,19 @@ export function reqUpdateCategory(categoryId ,categoryName){
 export function reqAddCategory(parentId ,categoryName){
   return ajax('/manage/category/add',{parentId ,categoryName},'POST')
 }
+/* 6、获取商品分页列表 */
+export const reqProducts = ({pageNum,pageSize})=> ajax('/manage/product/list',{pageNum,pageSize})
+
+/* 7、根据ID/Name搜索产品分页列表 */
+export const reqSearch = ({ pageNum,pageSize,searchType,searchContent})=>ajax('/manage/product/search',{
+  pageNum,
+  pageSize,
+  /* productName, productDesc */
+  [searchType]:searchContent
+  }
+)
+/* 8、对商品上下架进行更新 */
+export const reqUpdateStatus = ({productId,status})=>ajax('/manage/product/updateStatus',{productId,status},'POST')
 
 
 /* 请求天气  利用jsonp库*/

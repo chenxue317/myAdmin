@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Form,Input,Icon,Select} from 'antd'
+import {Form,Input,Select} from 'antd'
 
 class AddForm extends Component {
   static propTypes= {
