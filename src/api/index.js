@@ -17,9 +17,13 @@ export function reqAddUser ({username,password,phone,email,role_id}){
 export function reqCategorys(parentId){
   return ajax('/manage/category/list',{parentId},'GET')
 }
-
+/* 4.更新分类 */
 export function reqUpdateCategory(categoryId ,categoryName){
   return ajax('/manage/category/update',{categoryId ,categoryName},'POST')
+}
+/* 5、添加分类 */
+export function reqAddCategory(parentId ,categoryName){
+  return ajax('/manage/category/add',{parentId ,categoryName},'POST')
 }
 
 

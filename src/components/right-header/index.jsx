@@ -17,6 +17,7 @@ class RightHead extends Component {
   /* 获取天气 */
   getWeather = async()=>{
     const {dayPictureUrl,weather} = await reqWeather('北京');
+    debugger
     this.weather = weather;
     this.dayPictureUrl=dayPictureUrl
   }
@@ -60,6 +61,13 @@ class RightHead extends Component {
     const {currentTime} = this.state;
     const showText = this.getShowText();
     const username = memoryUtils.user.username;
+    const weather =(
+      <div>
+        
+        <img src={this.dayPictureUrl} alt="天气"/>
+        <span>{this.weather}</span>
+      </div>
+    ) ;
     return (
       <div className="right-header">
         <div className="right-header-top">
@@ -72,8 +80,7 @@ class RightHead extends Component {
           </div>
           <div className="right-header-bottom-right">
             <span>{currentTime}</span>
-            <img src={this.dayPictureUrl} alt="天气"/>
-            <span>{this.weather}</span>
+            {this.dayPictureUrl && weather}
           </div>
         </div>
       </div>

@@ -1,24 +1,10 @@
 import React, { Component } from 'react'
-import { Card ,Table,Button,Icon,Modal} from 'antd';
+import { Card ,Table,Button,Icon,Modal, message} from 'antd';
 
 import UpdateForm from './update-fom'
 import LinkButton from '../../components/link-button'
-import {reqCategorys,reqUpdateCategory} from '../../api'
-
-/* const columns = [
-  {
-    width :'75%',
-    title: 'Name',
-    dataIndex: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
-  },
-  {
-    width :'25%',
-    title: 'Cash Assets',
-    className: 'column-money',
-    dataIndex: 'money',
-  },
-]; */
+import {reqCategorys,reqUpdateCategory,reqAddCategory} from '../../api'
+import AddForm from './add-form'
 
 
 
@@ -34,10 +20,10 @@ export default class Category extends Component {
     visible:0
   }
 
-  getCategorys = async () => {
+  getCategorys = async (pId) => {
     // 发请求前, 显示loading
     this.setState({ loading: true })
-    const {parentId} = this.state
+    const parentId = pId || this.state.parentId
     /* 先收到请求的结果，是否成功 */
     const result = await reqCategorys(parentId)
     // 请求结束后, 隐藏loading
@@ -97,6 +83,10 @@ export default class Category extends Component {
         let result =await reqUpdateCategory(this.category._id,categoryName)
         if(result.status===0){
           this.setState({visible:0})
+          /* 重新获取一级分类页面，或者二级页面 */
+          this.form.resetFields()
+          this.getCategorys(this.category._id)
+          message.success('修改成功')
         }
       }
     });
@@ -105,7 +95,45 @@ export default class Category extends Component {
     this.setState({
       visible: 0,
     });
+    this.form.resetFields()
   };
+  //接收form的函数
+  addForm=(form)=>{
+    this.form = form
+  }
+  //显示添加对话框
+  showAddForm=()=>{
+    this.setState({visible: 2})
+  }
+  //确定添加--添加对话框
+  addOk = async (e)=>{
+    debugger
+    const {parentId ,categoryName} = this.form.getFieldsValue()
+    console.log(parentId ,categoryName)
+    const result = await reqAddCategory(parentId ,categoryName)
+    
+
+    if(result.status===0){
+      //1、再一级列表中添加数据，需要刷新一级分类列表
+     /*  if(parentId==='0'){
+        this.getCategorys("0")
+      }else if(parentId===this.setState.parentId){
+        debugger
+        /* 刷新2级列表 */
+     /*    this.getCategorys()
+      } */ 
+      this.getCategorys(parentId)
+      
+    }
+
+    this.setState({visible: 0})
+  }
+  //点击关闭添加对话框
+  addCancel=e=>{
+    this.setState({visible: 0})
+  }
+
+
     /* 初始化分类 */
 initColumns = () => {
   this.columns = [
@@ -149,7 +177,7 @@ initColumns = () => {
     )
     return (
     <Card title={title} extra={
-    (<Button type="primary">
+    (<Button type="primary" onClick={this.showAddForm}>
       <Icon type="plus"></Icon> 
       添加</Button>)}>
        <Table
@@ -158,7 +186,7 @@ initColumns = () => {
         dataSource={parentId==='0'?categorys:subCategorys}
         bordered
         pagination={
-          {defaultPageSize:2,}
+          {defaultPageSize:5,}
         }
       />
       <Modal
@@ -167,8 +195,16 @@ initColumns = () => {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <UpdateForm updateForm={this.updateForm}/>
-        </Modal>
+          <UpdateForm updateForm={this.updateForm} category={this.category}/>
+      </Modal>
+      <Modal
+          title="添加分类"
+          visible={this.state.visible===2}
+          onOk={this.addOk}
+          onCancel={this.addCancel}
+        >
+          <AddForm addForm={this.addForm} parentId={parentId} categorys={categorys}/>
+      </Modal>
     </Card>
     )
   }
