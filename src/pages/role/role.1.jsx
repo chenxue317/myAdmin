@@ -3,17 +3,14 @@ import {
   Card,
   Table,
   Button,
-  Modal,
-  message
+  Modal
 } from 'antd'
 
 
 import { reqRoles, reqRoleAdd, reqRoleUpdate } from '../../api'
 import {formateDate} from '../../utils/dateUtils'
-import memoryUtils from '../../utils/memoryUtils'
 import CreateRole from './creat_role'
 import SetAuth from './set_auth'
-import LinkButton from '../../components/link-button'
 /**
  * 角色管理
  */
@@ -25,9 +22,8 @@ export default class Role extends Component {
     roles:[],
     isShowCreat:false,
     isShowAuth:false,
+    selectedRowKeys:[],
   }
-  //设置权限容器
-  authRef = React.createRef()
  
   creatRole=()=>{
     //弹出对话框
@@ -52,10 +48,6 @@ export default class Role extends Component {
       {
         title: '授权人',
         dataIndex: 'auth_name',
-      },
-      {
-        title: '操作',
-        render:(role)=> <LinkButton onClick={()=>this.authRole(role)}>设置权限</LinkButton>
       },
     ];
     
@@ -91,27 +83,18 @@ export default class Role extends Component {
   //添加角色界面关闭
   addhandleCancel=()=> this.setState({isShowCreat:false})
   //设置角色权限
-  authRole=(role)=>{
+  authRole=()=>{
     this.setState({isShowAuth:true})
-    this.role = role
-  }
-  //点击设置角色权限确定按钮
-  authhandleOk=async()=>{
-    this.setState({isShowAuth:false})
-    const menus = this.authRef.current.getAllChecked()
-    const role = this.role
-    role.menus = menus
-    role.auth_time=Date.now()
-    role.auth_name=memoryUtils.user.username
-    const result = await reqRoleUpdate(role)
-    if(result.status===0){
-      message.success('设置权限成功')
-      this.initRoleList()
-    }
   }
   authhandleCancel=()=>this.setState({isShowAuth:false})
 
- 
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+  onSelect = (selected)=>{
+    this.role = selected;
+    console.log(this.role)
+  }
 
 
   componentWillMount(){
@@ -119,11 +102,23 @@ export default class Role extends Component {
   }
   
   render() {
-    const { roles, isShowCreat, isShowAuth } = this.state
-    
+    const { roles, isShowCreat, selectedRowKeys, isShowAuth } = this.state
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+      hideDefaultSelections:'true',
+      type: 'radio',
+      onSelect:this.onSelect
+      
+    }
+    console.log(selectedRowKeys)
+    const hasSelected = selectedRowKeys.length > 0;
     const title = (
       <span>
         <Button type="primary" style={{margin:10}} onClick={this.creatRole}>创建用户</Button>
+        <Button type="primary"  disabled={!hasSelected} onClick={this.authRole} >
+          设置用户权限
+        </Button>
       </span>
     )
     
@@ -136,6 +131,7 @@ export default class Role extends Component {
           pagination={
           {defaultPageSize:2}
           }
+          rowSelection={ rowSelection } 
           columns={this.columns}
           dataSource={roles} />
           <Modal
@@ -152,7 +148,7 @@ export default class Role extends Component {
           onOk={this.authhandleOk}
           onCancel={this.authhandleCancel}
           >
-           <SetAuth role = {this.role} ref={this.authRef}/>
+           <SetAuth role = {this.role}/>
           </Modal>
       </Card>
     )

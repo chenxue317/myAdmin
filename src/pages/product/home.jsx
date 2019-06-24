@@ -63,11 +63,12 @@ export default class Home extends Component {
       {
         title: '操作',
         width:100,
-        dataIndex: 'address',
-        render: ()=>(
+        render: (product)=>(
          <span>
-            <LinkButton>详情</LinkButton>
-            <LinkButton>修改</LinkButton>
+            <LinkButton 
+            onClick={()=> this.props.history.push('/product/detail',{product})}
+            >详情</LinkButton>
+            <LinkButton onClick={()=>this.props.history.push('/product/addupdate',product)}>修改</LinkButton>
          </span>
         )
       }
@@ -97,22 +98,8 @@ export default class Home extends Component {
       })
     }
   }
-  //获取搜索的商品列表
-/*   getSearchProducts= async ()=>{
-    const {searchType,searchContent} = this.state
-    if(!searchContent){
-      this.getProducts(this.page)
-    }else{
-      const result = await reqSearch({ pageNum:this.page||1,pageSize:PAGE_SIZE,searchType,searchContent})
-      if(result.status===0){
-        this.setState({
-          total:result.data.total,
-          products:result.data.list,
-        })
-      }
-    }
-    
-  }  */
+
+ 
   //更新商品上架状态
   updateStatus=async(productId,status)=>{//首先改变状态，然后改变显示的在售和已下架
     const result = await reqUpdateStatus({productId, status})
@@ -152,7 +139,7 @@ export default class Home extends Component {
     )
     const extra = (
       <span>
-        <Button type="primary">
+        <Button type="primary" onClick={()=>this.props.history.push('/product/addupdate')}>
           <Icon type="plus"/>
           添加商品
         </Button>

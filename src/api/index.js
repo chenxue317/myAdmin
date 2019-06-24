@@ -39,6 +39,30 @@ export const reqSearch = ({ pageNum,pageSize,searchType,searchContent})=>ajax('/
 /* 8、对商品上下架进行更新 */
 export const reqUpdateStatus = ({productId,status})=>ajax('/manage/product/updateStatus',{productId,status},'POST')
 
+/* 9、根据分类ID获取分类 */
+
+export const reqProduct = (categoryId)=>ajax('/manage/category/info',{categoryId})
+
+/* 10、更新商品 */
+export const reqAddOrUpdateProduct = (product)=>ajax('/manage/product/'+(product._id?'update':'add'),product,'POST')
+
+/* 11、获取角色列表 */
+
+export const reqRoles = ()=>ajax('/manage/role/list')
+/* 12、添加角色 */
+export const reqRoleAdd = (roleName)=>ajax('/manage/role/add',{roleName},'POST')
+/* 13、更新角色 */
+export const reqRoleUpdate = ({ _id, menus, auth_time, auth_name })=>ajax('/manage/role/update',{ _id, menus, auth_time, auth_name },'POST')
+/* 14、获取所有用户列表 */
+export const reqUsers = ()=> ajax('/manage/user/list')
+//15、添加用户
+export const reqAdd_User = ({username, password, phone, email, role_id}) => ajax('/manage/user/add',{username, password, phone, email, role_id},'POST')
+//更新用户
+
+export const reqUpdate_User = ({username, _id, phone, email, role_id}) => ajax('manage/user/update',{username, _id, phone, email, role_id},'POST')
+//删除用户
+export const reqDeleteUser = (userId) => ajax('/manage/user/delete',{userId},'POST')
+
 
 /* 请求天气  利用jsonp库*/
 

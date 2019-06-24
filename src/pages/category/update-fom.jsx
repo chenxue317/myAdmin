@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Form,Input,Icon} from 'antd'
+import {Form,Input} from 'antd'
 
 class UpateForm extends Component {
 

@@ -17,7 +17,6 @@ class RightHead extends Component {
   /* 获取天气 */
   getWeather = async()=>{
     const {dayPictureUrl,weather} = await reqWeather('北京');
-    debugger
     this.weather = weather;
     this.dayPictureUrl=dayPictureUrl
   }
@@ -26,11 +25,13 @@ class RightHead extends Component {
     const path = this.props.location.pathname;
     let text = '';
     /* 匹配path */
-    menuList.forEach((item,index)=>{
+    menuList.forEach((item)=>{
       if(item.key===path){
         text =item.title;
       }else if(item.children){
-        let cItem= item.children.find(cItem =>cItem.key===path)
+        //当是二级路由的时候，当点击三级路由，只要二级路由能同三级路由前半部分
+        //匹配，则直接显示二级路由的文字即可
+        let cItem= item.children.find(cItem =>path.indexOf(cItem.key)===0)
         if(cItem){
           text = cItem.title
         }
@@ -62,11 +63,11 @@ class RightHead extends Component {
     const showText = this.getShowText();
     const username = memoryUtils.user.username;
     const weather =(
-      <div>
+      <span>
         
         <img src={this.dayPictureUrl} alt="天气"/>
         <span>{this.weather}</span>
-      </div>
+      </span>
     ) ;
     return (
       <div className="right-header">

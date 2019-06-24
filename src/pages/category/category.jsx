@@ -107,7 +107,6 @@ export default class Category extends Component {
   }
   //确定添加--添加对话框
   addOk = async (e)=>{
-    debugger
     const {parentId ,categoryName} = this.form.getFieldsValue()
     console.log(parentId ,categoryName)
     const result = await reqAddCategory(parentId ,categoryName)
